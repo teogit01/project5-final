@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Build docker container
           command: |
-            echo image name: -> $DOCKER_IMAGE_NAME .
+            echo "image name: -> " $DOCKER_IMAGE_NAME .
             docker build --tag=$DOCKER_IMAGE_NAME .
             echo "Build completed"
             docker image ls
