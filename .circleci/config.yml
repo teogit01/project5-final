@@ -58,11 +58,103 @@ jobs:
             docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
             docker push $DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$CIRCLE_WORKFLOW_ID
   
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yum install -y tar gzip
+      - run:
+          name: Ensure EKS network exists
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/network.yml \
+              --tags project=capstone-project \
+              --stack-name "capstone-eks-network" \
+              --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides file://cloudformation/network-parameter.json
+      - run:
+          name: Ensure EKS Cluster exists
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/cluster.yml \
+              --tags project=capstone-project \
+              --stack-name "capstone-eks-cluster" \
+              --region ${AWS_DEFAULT_REGION} \              
+              --capabilities CAPABILITY_NAMED_IAM
+          no_output_timeout: 15m
+      - run:
+          name: Ensure Nodegroup exists
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/nodegroup.yml \
+              --tags project=capstone-project \
+              --stack-name "capstone-eks-nodegroup" \
+              --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides file://cloudformation/nodegroup-parameter.json \
+              --capabilities CAPABILITY_NAMED_IAM
+      - run:
+          name: Ensure controller instances exists
+          command: |
+            aws cloudformation deploy \
+              --template-file cloudformation/control.yml \
+              --tags project=capstone-project \
+              --stack-name "capstone-eks-controller" \
+              --region ${AWS_DEFAULT_REGION} \              
+              --output text >> ~/checkIfDeployed.txt
+            cat ~/checkIfDeployed.txt
+      - run:
+          name: Extract the IPs of the controller instances for Ansible
+          command: |
+            echo [controller] > ~/inventory.txt
+            aws ec2 describe-instances \
+              --region "${AWS_DEFAULT_REGION}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=capstone-controller*" \
+              --output text >> ~/inventory.txt
+            cat ~/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - inventory.txt
+            - checkIfDeployed.txt
+  
+  configure-infrastructure:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
+      - add_ssh_keys:
+          fingerprints: ["14:f0:23:f5:1e:13:58:55:76:bc:7e:f8:30:26:db:2c:4d:35:d1:82"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Configure server
+          command: |
+            if grep -q "No changes to deploy" ~/checkIfDeployed.txt
+              then
+                cat ~/inventory.txt
+                  echo "Our management instances are already configured."
+                else
+                  cat ~/inventory.txt                  
+                  cd ansible
+                  ansible-playbook -i ~/inventory.txt config-sever.yml -vvv
+                fi
+
 workflows:
   default: 
     jobs:
       - build      
       - upload-docker:
-          requires: [build]      
-      
+          requires: [build]
+   
   
