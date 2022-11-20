@@ -157,5 +157,4 @@ workflows:
           requires: [build]            
       - deploy-infrastructure:          
       - configure-infrastructure:
-          requires:
-            - deploy-infrastructure
+          requires: [deploy-infrastructure]            
