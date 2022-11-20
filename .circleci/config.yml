@@ -78,6 +78,7 @@ jobs:
       - run:
           name: Ensure EKS Cluster exists
           command: |
+            echo "{ENVIRONMENT_NAME}" ${ENVIRONMENT_NAME}
             aws cloudformation deploy \
               --template-file cloudformation/cluster.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
