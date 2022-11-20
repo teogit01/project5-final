@@ -1,12 +1,7 @@
 Description: >
   Capstone Project
   Creates an Amazon EKS Cluster
-Parameters:
-  EnvironmentName:
-    Description: An Environment name that will be prefixed to resources
-    Default: capstone-project
-    Type: String
-
+  
 Resources:
   ClusterInstanceProfile:
     Type: AWS::IAM::InstanceProfile
