@@ -83,7 +83,7 @@ jobs:
               --tags project=capstone-project \
               --stack-name "capstone-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \              
-              --capabilities empl
+              
           no_output_timeout: 15m
       - run:
           name: Ensure Nodegroup exists
@@ -94,7 +94,7 @@ jobs:
               --stack-name "capstone-eks-nodegroup" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
-              --capabilities empl
+              
       - run:
           name: Ensure controller instances exists
           command: |
