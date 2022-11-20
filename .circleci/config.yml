@@ -83,7 +83,8 @@ jobs:
               --tags project=capstone-project \
               --stack-name "capstone-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \              
-              
+              --parameter-overrides file://cloudformation/cluster-parameter.json \
+              --capabilities CAPABILITY_NAMED_IAM
           no_output_timeout: 15m
       - run:
           name: Ensure Nodegroup exists
