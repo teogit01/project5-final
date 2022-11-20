@@ -141,8 +141,8 @@ jobs:
           name: Configure server
           command: |
             if grep -q "No changes to deploy" ~/checkIfDeployed.txt
-                then
-                  cat ~/inventory.txt
+              then
+                cat ~/inventory.txt
                   echo "Our management instances are already configured."
                 else
                   cat ~/inventory.txt                  
