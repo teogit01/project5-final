@@ -46,6 +46,7 @@ jobs:
           name: Build docker container
           command: |
             echo "image name: -> " $DOCKER_IMAGE_NAME .
+            echo "CIRCLE_WORKFLOW_ID: -> " $CIRCLE_WORKFLOW_ID        
             docker build --tag=$DOCKER_IMAGE_NAME .
             echo "Build completed"
             docker image ls
