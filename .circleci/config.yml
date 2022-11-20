@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build1:
+  build:
     docker:
       - image: python:3.7.3-stretch
     steps:
@@ -155,5 +155,11 @@ workflows:
     jobs:
       - build      
       - upload-docker:
-          requires: [build]
+          requires: [build]      
+      - deploy-infrastructure:
+          filters:
+            branches:
+              only: [ main ]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
   
