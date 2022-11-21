@@ -4,7 +4,7 @@ Description: >
 Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
-    Default: my-capstone-project
+    Default: capstone-product-project
     Type: String
 
   VpcCIDR:
