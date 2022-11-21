@@ -11,9 +11,7 @@ commands:
       - run:
           name: Destroy environments
           when: on_fail
-          command: |          
-            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-network"
-            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-cluster"
+          command: |                      
             aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
             aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-controller"
 jobs:
@@ -144,7 +142,7 @@ jobs:
           paths:
             - inventory.txt
             - checkIfDeployed.txt      
-      
+      - destroy-environment:
 workflows:
   default: 
     jobs:
