@@ -8,7 +8,7 @@ Parameters:
     Type: String
   SSHKeyName:
     Description: SSH key for controller access
-    Default: keyp3
+    Default: capstone
     Type: String
   amiImageId:
     Description: Defines the Image-ID of the OS to deploy
@@ -19,7 +19,7 @@ Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Sub capstone-controller-SG
+      GroupName: !Sub ${EnvironmentName}-controller-SG
       GroupDescription: Allow port 22 for controller
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -37,7 +37,7 @@ Resources:
       ImageId: !Ref amiImageId
       Tags:
         - Key: Name
-          Value: !Sub capstone-controller1
+          Value: !Sub ${EnvironmentName}-controller1
         - Key: Project
           Value: !Ref EnvironmentName
 
@@ -51,6 +51,6 @@ Resources:
       ImageId: !Ref amiImageId
       Tags:
         - Key: Name
-          Value: !Sub capstone-controller2
+          Value: !Sub ${EnvironmentName}-controller2
         - Key: Project
           Value: !Ref EnvironmentName
