@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   build:
     docker:
@@ -68,13 +69,13 @@ jobs:
       - run:
           name: Ensure EKS network exists
           command: |
-            export STACK_NAME = "${ENVIRONMENT_NAME}-eks-network"
             aws cloudformation deploy \
               --template-file cloudformation/network.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
-              --stack-name "${STACK_NAME}" \
+              --stack-name "${ENVIRONMENT_NAME}-eks-network" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/network-parameter.json
+
       - run:
           name: Ensure EKS Cluster exists
           command: |
@@ -117,11 +118,7 @@ jobs:
               --filters "Name=tag:Name,Values=capstone-controller*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
-      - run:
-          name: Detroy when fail
-          when: on_fail
-          command: |
-            aws cloudformation delete-stack --stack-name ${STACK_NAME}
+      
       - persist_to_workspace:
           root: ~/
           paths:
