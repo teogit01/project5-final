@@ -115,6 +115,12 @@ jobs:
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
               --capabilities CAPABILITY_NAMED_IAM
+       - run:
+          name: Destroy nodegroup when fail environments
+          when: on_fail
+          command: |                      
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-nodegroup"            
+
       - run:
           name: Ensure controller instances exists
           command: |
