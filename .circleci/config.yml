@@ -36,7 +36,7 @@ jobs:
 
   upload-docker:
     docker:
-      - image: cimg/go:1.19.3
+      - image: circleci/golang:1.15
     working_directory: ~/repo
     steps:
       - checkout
@@ -71,8 +71,8 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file cloudformation/network.yml \
-              --tags project=capston-test-project \
-              --stack-name "capston-test-eks-network" \
+              --tags project=${ENVIRONMENT_NAME}-project \
+              --stack-name "${ENVIRONMENT_NAME}-eks-network" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/network-parameter.json      
       
