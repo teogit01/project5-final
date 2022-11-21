@@ -67,9 +67,12 @@ jobs:
           name: Install dependencies
           command: yum install -y tar gzip
       - run:
-          name: remove old cluster
+          name: remove old stask
           command: |
+            aws cloudformation delete-stack --stack-name capstone-eks-network
             aws cloudformation delete-stack --stack-name capstone-eks-cluster
+            aws cloudformation delete-stack --stack-name capstone-eks-nodegroup
+            aws cloudformation delete-stack --stack-name capstone-eks-controller
       - run:      
           name: Ensure EKS network exists
           command: |                                           
