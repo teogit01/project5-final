@@ -85,8 +85,8 @@ jobs:
       - run:
           name: remove old stack   
           command: |
-            aws cloudformation delete-stack --stack-name "capstone-project-eks-nodegroup"
-            aws cloudformation delete-stack --stack-name "capstone-project-eks-controller"
+            aws cloudformation delete-stack --stack-name "my-capstone-project-eks-nodegroup"
+            aws cloudformation delete-stack --stack-name "my-capstone-project-eks-controller"
       - run:      
           name: Ensure EKS network exists
           command: |                                           
