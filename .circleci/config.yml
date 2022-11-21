@@ -136,13 +136,14 @@ jobs:
               --filters "Name=tag:Name,Values=${ENVIRONMENT_NAME}-controller*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
-      
+            
       - persist_to_workspace:
           root: ~/
           paths:
             - inventory.txt
             - checkIfDeployed.txt      
-      - destroy-environment:
+      - destroy-environment
+
 workflows:
   default: 
     jobs:
