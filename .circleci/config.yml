@@ -12,7 +12,8 @@ commands:
           name: Destroy nodegroup environments
           when: on_fail
           command: |                      
-            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"            
+            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
+            aws cloudformation describe-stack-events --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
 jobs:
   build:
     docker:
