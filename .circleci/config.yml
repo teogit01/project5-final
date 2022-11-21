@@ -69,9 +69,7 @@ jobs:
       - run:
           name: Ensure EKS network exists
           command: |
-          
-            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-network"
-
+                                
             aws cloudformation deploy \
               --template-file cloudformation/network.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
