@@ -1,5 +1,21 @@
 version: 2.1
 
+commands:
+  destroy-environment:
+    description: Destroy stack on fail
+    parameters:
+      Workflow_ID:
+        type: string
+        default: ${ENVIRONMENT_NAME}
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |          
+            aws cloudformation delete-stack --stack-name "-<<parameters.ENVIRONMENT_NAME>>-eks-network"
+            aws cloudformation delete-stack --stack-name "-<<parameters.ENVIRONMENT_NAME>>-eks-cluster"
+            aws cloudformation delete-stack --stack-name "-<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
+            aws cloudformation delete-stack --stack-name "-<<parameters.ENVIRONMENT_NAME>>-eks-controller"
 jobs:
   build:
     docker:
@@ -65,14 +81,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yum install -y tar gzip
-      - run:
-          name: remove old stask
-          command: |
-            aws cloudformation delete-stack --stack-name capstone-eks-network
-            aws cloudformation delete-stack --stack-name capstone-eks-cluster
-            aws cloudformation delete-stack --stack-name capstone-eks-nodegroup
-            aws cloudformation delete-stack --stack-name capstone-eks-controller
+          command: yum install -y tar gzip      
       - run:      
           name: Ensure EKS network exists
           command: |                                           
@@ -130,6 +139,8 @@ jobs:
           paths:
             - inventory.txt
             - checkIfDeployed.txt
+      - destroy-environment
+      
 workflows:
   default: 
     jobs:
