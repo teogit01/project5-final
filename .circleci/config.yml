@@ -88,5 +88,8 @@ workflows:
       - upload-docker:
           requires: [build]      
       - deploy-infrastructure:
+        filters:
+            branches:
+              only: [ main ]
           
   
