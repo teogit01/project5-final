@@ -67,6 +67,10 @@ jobs:
           name: Install dependencies
           command: yum install -y tar gzip
       - run:
+          name: remove old cluster
+          command: |
+            aws cloudformation delete-stack --stack-name capstone-project-eks-cluster
+      - run:      
           name: Ensure EKS network exists
           command: |                                           
             aws cloudformation deploy \
@@ -77,7 +81,7 @@ jobs:
               --parameter-overrides file://cloudformation/network-parameter.json      
       - run:
           name: Ensure EKS Cluster exists
-          command: |
+          command: |            
             aws cloudformation deploy \
               --template-file cloudformation/cluster.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
