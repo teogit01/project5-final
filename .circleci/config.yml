@@ -68,14 +68,8 @@ jobs:
           command: yum install -y tar gzip
       - run:
           name: Ensure EKS network exists
-          command: |                                
-            aws cloudformation deploy \
-              --template-file cloudformation/network.yml \
-              --tags project=${ENVIRONMENT_NAME}-project \
-              --stack-name "${ENVIRONMENT_NAME}-eks-network" \
-              --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/network-parameter.json      
-     
+          command: |                               
+            aws cloudformation delete-stack --stack-name my-capstone-project-eks-network                     
       - persist_to_workspace:
           root: ~/
           paths:
