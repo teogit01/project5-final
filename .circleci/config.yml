@@ -75,7 +75,13 @@ jobs:
               --stack-name "${ENVIRONMENT_NAME}-eks-network" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/network-parameter.json      
-      
+      - run:
+          name: Destroy stack
+          when: on_fail
+          command: |          
+            
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-network"
+  
       - persist_to_workspace:
           root: ~/
           paths:
