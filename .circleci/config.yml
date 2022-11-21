@@ -81,7 +81,12 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yum install -y tar gzip      
+          command: yum install -y tar gzip   
+      - run:
+        name: remove old stack   
+        command: |
+          aws cloudformation delete-stack --stack-name "capston-project-eks-nodegroup"
+          aws cloudformation delete-stack --stack-name "capston-project-eks-controller"
       - run:      
           name: Ensure EKS network exists
           command: |                                           
@@ -138,8 +143,7 @@ jobs:
           root: ~/
           paths:
             - inventory.txt
-            - checkIfDeployed.txt
-      - destroy-environment
+            - checkIfDeployed.txt      
       
 workflows:
   default: 
