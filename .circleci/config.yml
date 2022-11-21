@@ -81,12 +81,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yum install -y tar gzip   
-      - run:
-          name: remove old stack   
-          command: |
-            aws cloudformation delete-stack --stack-name capstone-eks-nodegroup
-            aws cloudformation delete-stack --stack-name capstone-eks-controller
+          command: yum install -y tar gzip         
       - run:      
           name: Ensure EKS network exists
           command: |                                           
