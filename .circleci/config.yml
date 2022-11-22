@@ -80,7 +80,7 @@ jobs:
           name: Install dependencies
           command: yum install -y tar gzip      
       - run:
-        name: remove stack nodegroup
+          name: remove stack nodegroup
           command: |        
             aws cloudformation delete-stack --stack-name capsonte-eks-nodegroup
             aws cloudformation delete-stack --stack-name capsonte-project-eks-nodegroup          
