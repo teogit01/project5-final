@@ -108,7 +108,7 @@ jobs:
               --output text >> ~/checkIfDeployed.txt
             cat ~/checkIfDeployed.txt
       - run:
-          name: Extract the IPs of the controller instances for Ansible
+          name: Extract the IPs of the toggle instances for Ansible
           command: |
             echo [toggle] > ~/inventory.txt
             aws ec2 describe-instances \
