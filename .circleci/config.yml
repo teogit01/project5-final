@@ -78,7 +78,12 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yum install -y tar gzip                        
+          command: yum install -y tar gzip      
+      - run:
+          name: remove stack controller
+          command: |        
+            aws cloudformation delete-stack --stack-name capstone-eks-controller
+            aws cloudformation delete-stack --stack-name my-capstone-eks-controller
       - run:      
           name: Ensure EKS network exists
           command: |                                           
@@ -121,7 +126,7 @@ jobs:
               --stack-name "${ENVIRONMENT_NAME}-eks-controller" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/control-parameter.json \
-              --no-execute-changeset \
+              --no-execute-changeset 
               --output text >> ~/checkIfDeployed.txt
             cat ~/checkIfDeployed.txt
       - run:
