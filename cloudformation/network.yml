@@ -1,7 +1,6 @@
 Description: >
   Capstone Project
   Creates a VPC with public subnets for EKS.
-
 Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
@@ -9,14 +8,14 @@ Parameters:
     Type: String
 
   VpcCIDR:
-    Description: The CIDR range for the VPC.
     Type: String
-    Default: 192.168.0.0/16    
+    Default: 192.168.0.0/16
+    Description: The CIDR range for the VPC.
 
   PublicSubnet1CIDR:
-    Description: CidrBlock for public subnet 1
     Type: String
-    Default: 192.168.0.0/18    
+    Default: 192.168.0.0/18
+    Description: CidrBlock for public subnet 1
 
   PublicSubnet2CIDR:
     Type: String
@@ -84,7 +83,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-NatGatewayAZ1
-    
+
   NatGateway2:
     DependsOn:
       - NatGatewayEIP2
