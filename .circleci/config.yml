@@ -87,8 +87,7 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-network" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/network-parameter.json
-              
+              --parameter-overrides file://cloudformation/network-parameter.json              
       - run:
           name: Ensure EKS Cluster exists
           command: |            
@@ -110,8 +109,7 @@ jobs:
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
               --capabilities CAPABILITY_NAMED_IAM \
-              --no-execute-changeset  
-               
+              --no-execute-changeset                 
       - run:
           name: Ensure controller instances exists
           command: |

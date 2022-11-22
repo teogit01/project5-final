@@ -35,7 +35,7 @@ Metadata:
           - PublicSubnet2CIDR
 
 Resources:
-  VPC:
+  VPC: Empl1's VPC
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock:  !Ref VpcCIDR
