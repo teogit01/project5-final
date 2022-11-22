@@ -1,6 +1,7 @@
 Description: >
   Capstone Project
   Creates a VPC with public subnets for EKS.
+
 Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
@@ -83,7 +84,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-NatGatewayAZ1
-
+    
   NatGateway2:
     DependsOn:
       - NatGatewayEIP2

@@ -12,8 +12,7 @@ commands:
           name: Destroy nodegroup environments
           when: on_fail
           command: |                      
-            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
-            aws cloudformation describe-stack-events --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"
+            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"            
 jobs:
   build:
     docker:
@@ -79,7 +78,12 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yum install -y tar gzip                 
+          command: yum install -y tar gzip      
+      - run:
+        name: remove stack nodegroup
+        command: |        
+          aws cloudformation delete-stack --stack-name capsonte-eks-nodegroup
+          aws cloudformation delete-stack --stack-name capsonte-project-eks-nodegroup          
       - run:      
           name: Ensure EKS network exists
           command: |                                           
