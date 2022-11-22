@@ -1,5 +1,21 @@
 version: 2.1
 
+commands:
+  destroy-environment:
+    description: Destroy stasks when fail
+    parameters:
+      ENVIRONMENT_NAME:
+        type: string
+        default: ${ENVIRONMENT_NAME} 
+    steps:
+      - run:
+          name: Destroy stask
+          when: on_fail
+          command: |                                              
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-network" 
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-cluster"
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-nodegroup"
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-toggle" 
 jobs:
   build:
     docker:
@@ -117,12 +133,13 @@ jobs:
               --filters "Name=tag:Name,Values=${ENVIRONMENT_NAME}-toggle*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
+      - destroy-environment
       - persist_to_workspace:
           root: ~/
           paths:
             - inventory.txt
             - checkIfDeployed.txt
-
+            
 workflows:
   default: 
     jobs:
