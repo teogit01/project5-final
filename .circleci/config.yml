@@ -97,7 +97,7 @@ jobs:
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
               --capabilities CAPABILITY_NAMED_IAM
       - run:
-          name: Ensure controller instances exists
+          name: Ensure toggle instances exists
           command: |
             aws cloudformation deploy \
               --template-file cloudformation/toggle.yml \
