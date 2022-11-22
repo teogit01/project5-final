@@ -81,9 +81,9 @@ jobs:
           command: yum install -y tar gzip      
       - run:
         name: remove stack nodegroup
-        command: |        
-          aws cloudformation delete-stack --stack-name capsonte-eks-nodegroup
-          aws cloudformation delete-stack --stack-name capsonte-project-eks-nodegroup          
+          command: |        
+            aws cloudformation delete-stack --stack-name capsonte-eks-nodegroup
+            aws cloudformation delete-stack --stack-name capsonte-project-eks-nodegroup          
       - run:      
           name: Ensure EKS network exists
           command: |                                           
