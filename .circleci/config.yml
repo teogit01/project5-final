@@ -86,8 +86,7 @@ jobs:
               --template-file cloudformation/network.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-network" \
-              --region ${AWS_DEFAULT_REGION} \
-              --no-execute-changeset \
+              --region ${AWS_DEFAULT_REGION} \              
               --parameter-overrides file://cloudformation/network-parameter.json              
       - run:
           name: Ensure EKS Cluster exists
@@ -97,8 +96,7 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/cluster-parameter.json \
-              --no-execute-changeset \
+              --parameter-overrides file://cloudformation/cluster-parameter.json \              
               --capabilities CAPABILITY_NAMED_IAM
           no_output_timeout: 15m
       - run:
@@ -110,8 +108,7 @@ jobs:
               --stack-name "${ENVIRONMENT_NAME}-eks-nodegroup" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
-              --capabilities CAPABILITY_NAMED_IAM \
-              --no-execute-changeset                 
+              --capabilities CAPABILITY_NAMED_IAM \                     
       - run:
           name: Ensure controller instances exists
           command: |
@@ -120,14 +117,13 @@ jobs:
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-controller" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/control-parameter.json \
-              --no-execute-changeset \
+              --parameter-overrides file://cloudformation/control-parameter.json \              
               --output text >> ~/checkIfDeployed.txt
             cat ~/checkIfDeployed.txt
       - run:
           name: Extract the IPs of the controller instances for Ansible
           command: |
-            echo [controll] > ~/inventory.txt
+            echo [controller] > ~/inventory.txt
             aws ec2 describe-instances \
               --region "${AWS_DEFAULT_REGION}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
