@@ -148,6 +148,6 @@ workflows:
       - deploy-infrastructure:
         filters:
             branches:
-              only: [ main ]
+              only: [ master ]
           
   
