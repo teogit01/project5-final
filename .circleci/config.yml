@@ -1,18 +1,5 @@
 version: 2.1
 
-commands:
-  destroy-nodegroup-environment:
-    description: Destroy stack on fail
-    parameters:
-      ENVIRONMENT_NAME:
-        type: string
-        default: ${ENVIRONMENT_NAME}
-    steps:
-      - run:
-          name: Destroy nodegroup environments
-          when: on_fail
-          command: |                      
-            aws cloudformation delete-stack --stack-name "<<parameters.ENVIRONMENT_NAME>>-eks-nodegroup"            
 jobs:
   build:
     docker:
@@ -79,24 +66,24 @@ jobs:
       - run:
           name: Install dependencies
           command: yum install -y tar gzip            
-      - run:      
+      - run:
           name: Ensure EKS network exists
-          command: |                                           
+          command: |
             aws cloudformation deploy \
               --template-file cloudformation/network.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-network" \
-              --region ${AWS_DEFAULT_REGION} \              
-              --parameter-overrides file://cloudformation/network-parameter.json              
+              --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides file://cloudformation/network-parameter.json
       - run:
           name: Ensure EKS Cluster exists
-          command: |            
+          command: |
             aws cloudformation deploy \
               --template-file cloudformation/cluster.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
               --stack-name "${ENVIRONMENT_NAME}-eks-cluster" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/cluster-parameter.json \              
+              --parameter-overrides file://cloudformation/cluster-parameter.json \
               --capabilities CAPABILITY_NAMED_IAM
           no_output_timeout: 15m
       - run:
@@ -108,34 +95,33 @@ jobs:
               --stack-name "${ENVIRONMENT_NAME}-eks-nodegroup" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/nodegroup-parameter.json \
-              --capabilities CAPABILITY_NAMED_IAM \                     
+              --capabilities CAPABILITY_NAMED_IAM
       - run:
           name: Ensure controller instances exists
           command: |
             aws cloudformation deploy \
-              --template-file cloudformation/control.yml \
+              --template-file cloudformation/toggle.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
-              --stack-name "${ENVIRONMENT_NAME}-eks-controller" \
+              --stack-name "${ENVIRONMENT_NAME}-eks-toggle" \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides file://cloudformation/control-parameter.json \              
+              --parameter-overrides file://cloudformation/toggle-parameter.json \
               --output text >> ~/checkIfDeployed.txt
             cat ~/checkIfDeployed.txt
       - run:
           name: Extract the IPs of the controller instances for Ansible
           command: |
-            echo [controller] > ~/inventory.txt
+            echo [toggle] > ~/inventory.txt
             aws ec2 describe-instances \
               --region "${AWS_DEFAULT_REGION}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=${ENVIRONMENT_NAME}-controller*" \
+              --filters "Name=tag:Name,Values=${ENVIRONMENT_NAME}-toggle*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
-            
       - persist_to_workspace:
           root: ~/
           paths:
             - inventory.txt
-            - checkIfDeployed.txt 
+            - checkIfDeployed.txt
 
 workflows:
   default: 
