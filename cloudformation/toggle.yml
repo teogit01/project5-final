@@ -1,6 +1,7 @@
 Description: >
   Capstone Project
   Creates two individual hosts to toggle the EKS-Cluster
+
 Parameters:
   EnvironmentName:
     Description: An Environment name that will be prefixed to resources

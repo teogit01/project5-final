@@ -244,9 +244,24 @@ jobs:
 workflows:
   default: 
     jobs:
-      - deploy-infrastructure:
-        filters:
+      - build
+      - upload-docker:
+          requires:
+            - build
+          filters:
             branches:
               only: [ main ]
-      
-  
+      - deploy-infrastructure:
+          filters:
+            branches:
+              only: [ main ]
+      - configure-infrastructure:
+          requires:
+            - deploy-infrastructure
+      - configure-cluster:
+          requires:
+            - configure-infrastructure
+            - upload-docker
+      - deploy-docker:
+          requires:
+            - configure-cluster
