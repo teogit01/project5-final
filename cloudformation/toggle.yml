@@ -19,7 +19,7 @@ Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Sub capstone-latest-toggle-SG
+      GroupName: !Sub ${EnvironmentName}-toggle-SG
       GroupDescription: Allow port 22 for toggle
       SecurityGroupIngress:
         - IpProtocol: tcp
