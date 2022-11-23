@@ -16,6 +16,17 @@ commands:
             aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-cluster"
             aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-nodegroup"
             aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-toggle" 
+  
+  install_ansible:
+    description: Install Ansible
+    steps:
+      - run:
+          name: Install Ansible
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
 jobs:
   build:
     docker:
@@ -139,16 +150,42 @@ jobs:
           paths:
             - inventory.txt
             - checkIfDeployed.txt
-            
+
+  configure-infrastructure:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_ansible
+      - add_ssh_keys:
+          fingerprints:
+            - "48:4f:3e:61:65:78:6d:67:cb:16:0e:38:ad:a9:ab:37:0d:98:c1:c2"
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Configure server
+          command: |
+            if grep -q "No changes to deploy" ~/checkIfDeployed.txt
+                then
+                  cat ~/inventory.txt
+                  echo "Our management instances are already configured."
+                else
+                  cat ~/inventory.txt                                                                        
+                  cd ansible                  
+                  ansible-playbook -i ~/inventory.txt configure-server.yml
+                fi
+
 workflows:
   default: 
     jobs:
-      #- build      
-      #- upload-docker:
-      #    requires: [build]      
+      - build      
+      - upload-docker:
+          requires: [build]      
       - deploy-infrastructure:
         filters:
             branches:
               only: [ master ]
-          
+      - configure-infrastructure:
+          requires:
+            - deploy-infrastructure    
   

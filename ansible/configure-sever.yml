@@ -1,5 +1,5 @@
 - name: "Install dependencies"
-  hosts: controller
+  hosts: toggle
   user: ubuntu
   become: yes
   become_method: sudo
@@ -27,7 +27,7 @@
     - install-kubectl
 
 - name: "Authenticate AWS CLI with AWS"
-  hosts: controller
+  hosts: toggle
   user: ubuntu
   become: yes
   become_method: sudo
@@ -46,7 +46,7 @@
       shell: "aws configure set default.region {{ AWS_DEFAULT_REGION }}"
 
 - name: "Fetch kubectl config"
-  hosts: controller
+  hosts: toggle
   user: ubuntu
   gather_facts: false
   become: yes
@@ -55,4 +55,4 @@
     ENVIRONMENT_NAME: "capstone-project"
   pre_tasks:
     - name: Create a kubeconfig file for the cluster
-      shell: "aws eks update-kubeconfig --region {{ AWS_DEFAULT_REGION }} --name capstone-project-cluster"
+      shell: "aws eks update-kubeconfig --region {{ AWS_DEFAULT_REGION }} --name {{ ENVIRONMENT_NAME }}-cluster"
