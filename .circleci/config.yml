@@ -125,7 +125,8 @@ jobs:
               --capabilities CAPABILITY_NAMED_IAM
       - run:
           name: Ensure toggle instances exists
-          command: |           
+          command: |  
+            aws cloudformation delete-stack --stack-name "${ENVIRONMENT_NAME}-eks-toggle"
             aws cloudformation deploy \
               --template-file cloudformation/toggle.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
