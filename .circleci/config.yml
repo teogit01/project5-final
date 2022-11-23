@@ -208,15 +208,15 @@ jobs:
                 cat ~/inventory.txt
                 echo "Wait 60 seconds..."
                 sleep 60
-              fi
+              fi     
       - run:
           name: Display the LoadBalancer's DNS name
           command: |
-            cat ~/inventory.txt            
+            cat ~/inventory.txt
             cd ansible
-            ansible-playbook -i ~/inventory.txt elb-dns.yml -vvv
-            cat > ~/elb_dns.txt
+            ansible-playbook -i ~/inventory.txt elb-dns.yml
             cat ~/elb_dns.txt
+
       - persist_to_workspace:
           root: ~/
           paths:
