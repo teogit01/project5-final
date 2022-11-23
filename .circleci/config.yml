@@ -129,7 +129,7 @@ jobs:
             aws cloudformation deploy \
               --template-file cloudformation/toggle.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
-              --stack-name "${ENVIRONMENT_NAME}-eks-toggle" \
+              --stack-name "${ENVIRONMENT_NAME}-eks-toggle1" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides file://cloudformation/toggle-parameter.json \
               --output text >> ~/checkIfDeployed.txt
