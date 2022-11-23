@@ -7,3 +7,4 @@
   shell: "./bin/kubectl apply -f capstone-project-deployment.yml"
   args:
     chdir: $HOME
+    
