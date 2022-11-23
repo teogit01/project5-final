@@ -5,5 +5,5 @@
     remote_src: yes
 
 - name: "Install the AWS CLI"
-  shell: ~/aws/install -update
+  shell: ~/aws/install -u
   
