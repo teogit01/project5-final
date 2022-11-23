@@ -144,7 +144,7 @@ jobs:
               --filters "Name=tag:Name,Values=${ENVIRONMENT_NAME}-toggle*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
-      - destroy-environment
+      
       - persist_to_workspace:
           root: ~/
           paths:
