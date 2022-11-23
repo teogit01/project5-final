@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-project-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: capstone-project-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
