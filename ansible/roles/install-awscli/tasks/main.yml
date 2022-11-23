@@ -12,6 +12,6 @@
 #     chdir: $HOME
 
 - name: "Install the AWS CLI"
-  shell: ~/aws/install
+  shell: ~/aws/install --upgrade awscli
   # args:
   #   chdir: $HOME
