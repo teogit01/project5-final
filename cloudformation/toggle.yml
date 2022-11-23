@@ -37,7 +37,7 @@ Resources:
       ImageId: !Ref amiImageId
       Tags:
         - Key: Name
-          Value: !Sub capstone-latest-toggle1
+          Value: !Sub ${EnvironmentName}-toggle1
         - Key: Project
           Value: !Ref EnvironmentName
 
@@ -51,6 +51,6 @@ Resources:
       ImageId: !Ref amiImageId
       Tags:
         - Key: Name
-          Value: !Sub capstone-latest-toggle2
+          Value: !Sub ${EnvironmentName}-toggle2
         - Key: Project
           Value: !Ref EnvironmentName

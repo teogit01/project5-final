@@ -125,8 +125,7 @@ jobs:
               --capabilities CAPABILITY_NAMED_IAM
       - run:
           name: Ensure toggle instances exists
-          command: |  
-            aws cloudformation delete-stack --stack-name capstone-latest-eks-toggle
+          command: |              
             aws cloudformation deploy \
               --template-file cloudformation/toggle.yml \
               --tags project=${ENVIRONMENT_NAME}-project \
@@ -146,6 +145,7 @@ jobs:
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
       
+      - destroy-environment
       - persist_to_workspace:
           root: ~/
           paths:
@@ -245,21 +245,9 @@ jobs:
 workflows:
   default: 
     jobs:
-      - build      
-      - upload-docker:
-          requires: [build]      
       - deploy-infrastructure:
         filters:
             branches:
-              only: [ master ]
-      - configure-infrastructure:
-          requires:
-            - deploy-infrastructure    
-      - configure-cluster:
-          requires:
-            - configure-infrastructure
-            - upload-docker
-      - deploy-docker:
-          requires:
-            - configure-cluster
+              only: [ main ]
+      
   
