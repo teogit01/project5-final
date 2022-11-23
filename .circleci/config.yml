@@ -141,7 +141,7 @@ jobs:
             aws ec2 describe-instances \
               --region "${AWS_DEFAULT_REGION}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,capstone-project-toggle*" \
+              --filters "Name=tag:Name,Values=capstone-project-toggle*" \
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
       
