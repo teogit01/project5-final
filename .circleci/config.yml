@@ -145,7 +145,6 @@ jobs:
               --output text >> ~/inventory.txt
             cat ~/inventory.txt
       
-      - destroy-environment
       - persist_to_workspace:
           root: ~/
           paths:
