@@ -13,7 +13,7 @@
         chdir: $HOME
 
     - name: Check if deployment is successful
-      shell: "./bin/kubectl rollout status -f deployments/{{ ENVIRONMENT_NAME }}-deployment"
+      shell: "./bin/kubectl rollout status -f app=emb1605272/{{ ENVIRONMENT_NAME }}:{{ CIRCLE_WORKFLOW_ID }}"
       args:
         chdir: $HOME
 
